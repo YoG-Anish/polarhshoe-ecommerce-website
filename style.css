@@ -1,3 +1,15 @@
+/*
+    Theme Name: Polarshoe
+    Theme URI: https://polarshoe.com
+    Description: Polarshoe theme
+    Author: Anish Maka
+    Author URI: https://polarshoe.com
+    Version: 1.0.0
+    License: MIT
+    License URI: https://opensource.org/licenses/MIT
+    Text Domain: polarshoe
+*/
+
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Quicksand:wght@300..700&display=swap');
 
 :root {
