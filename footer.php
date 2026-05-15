@@ -163,13 +163,7 @@
 </footer>
 
 
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/splide.min.js"></script>
-<script src="js/wow.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-<script src="js/script.js"></script>
-
+<?php wp_footer(); ?>
 </body>
 
 </html>
