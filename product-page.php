@@ -1,6 +1,9 @@
 <!------------------------------------------ header ------------------------------------------>
 
 <?php
+/*
+Template Name: Product Page
+*/
 get_header(); ?>
 
 <!------------------------------------------ End header ------------------------------------------>
@@ -17,28 +20,28 @@ get_header(); ?>
                                     <li class="splide__slide">
                                         <div class="img-holder">
                                             <a href="images/product__1.png" data-fancybox="gallery" data-caption="gallery1">
-                                                <img src="images/product__1.png" alt="">
+                                                <img src="<?php echo get_template_directory_uri(); ?>/images/product__1.png" alt="">
                                             </a>
                                         </div>
                                     </li>
                                     <li class="splide__slide">
                                         <div class="img-holder">
                                             <a href="images/product__1.png" data-fancybox="gallery" data-caption="gallery1">
-                                                <img src="images/product__1.png" alt="">
+                                                <img src="<?php echo get_template_directory_uri(); ?>/images/product__1.png" alt="">
                                             </a>
                                         </div>
                                     </li>
                                     <li class="splide__slide">
                                         <div class="img-holder">
                                             <a href="images/product__1.png" data-fancybox="gallery" data-caption="gallery1">
-                                                <img src="images/product__1.png" alt="">
+                                                <img src="<?php echo get_template_directory_uri(); ?>/images/product__1.png" alt="">
                                             </a>
                                         </div>
                                     </li>
                                     <li class="splide__slide">
                                         <div class="img-holder">
                                             <a href="images/product__1.png" data-fancybox="gallery" data-caption="gallery1">
-                                                <img src="images/product__1.png" alt="">
+                                                <img src="<?php echo get_template_directory_uri(); ?>/images/product__1.png" alt="">
                                             </a>
                                         </div>
                                     </li>

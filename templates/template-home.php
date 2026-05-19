@@ -51,8 +51,7 @@ get_header(); ?>
         </div>
 
         <div class="product-slider">
-            <!-- IMPORTANT: Added ID "hiking-essentials-slider" for your JS -->
-            <div id="hiking-essentials-slider" class="splide">
+            <div class="splide">
                 <div class="splide__track">
                     <ul class="splide__list">
                         <?php
@@ -127,22 +126,49 @@ get_header(); ?>
             </div>
         </div>
         <div class="featured-grid-box">
+            <?php
+            function get_cat_slot_data($setting_id)
+            {
+                $cat_id = get_theme_mod($setting_id);
+                if (!$cat_id) return false;
+
+                $cat = get_term($cat_id, 'product_cat');
+                if (is_wp_error($cat) || !$cat) return false;
+
+                $thumb_id = get_term_meta($cat->term_id, 'thumbnail_id', true);
+                $img = wp_get_attachment_url($thumb_id);
+                $alt = get_post_meta($thumb_id, '_wp_attachment_image_alt', true);
+
+                return [
+                    'name' => $cat->name,
+                    'link' => get_term_link($cat),
+                    'desc' => $cat->description,
+                    'img'  => $img ? $img : '',
+                    'alt'  => $alt ? $alt : '',
+                ];
+            }
+            // Fetch Slot Data
+            $slot1 = get_cat_slot_data('featured_cat_slot_1'); // Big Box Top
+            $slot2 = get_cat_slot_data('featured_cat_slot_2'); // Rect Box 1
+            $slot3 = get_cat_slot_data('featured_cat_slot_3'); // Rect Box 2
+            $slot4 = get_cat_slot_data('featured_cat_slot_4'); // Big Box Bottom (Last Box)
+            ?>
             <div class="grid-item big-box">
-                <a href="#">
+                <a href="<?php echo $slot1['link']; ?>">
                     <div class="featured-collection">
                         <div class="background-image-container">
                             <div class="img-holder">
-                                <img src="images/collection_1.png" alt="">
+                                <img src="<?php echo $slot1['img']; ?>" alt="<?php echo $slot1['alt']; ?>">
                             </div>
                         </div>
                         <div class="content-box">
                             <div class="main-title">
                                 <h2 class="title">
-                                    Men Collection
+                                    <?php echo $slot1['name']; ?> Collection
                                 </h2>
                             </div>
                             <div class="text-box">
-                                <p>Every piece is made to last beyond the season</p>
+                                <p><?php echo $slot1['desc']; ?></p>
                             </div>
                             <div class="default-btn_v2">
                                 <span class="underline">
@@ -161,17 +187,17 @@ get_header(); ?>
                 </a>
             </div>
             <div class="grid-item rect-box">
-                <a href="#">
+                <a href="<?php echo $slot2['link']; ?>">
                     <div class="featured-collection">
                         <div class="background-image-container">
                             <div class="img-holder">
-                                <img src="images/collection_1.png" alt="">
+                                <img src="<?php echo $slot2['img']; ?>" alt="<?php echo $slot2['alt']; ?>">
                             </div>
                         </div>
                         <div class="content-box">
                             <div class="main-title">
                                 <h2 class="title">
-                                    Men Collection
+                                    <?php echo $slot2['name']; ?> Collection
                                 </h2>
                             </div>
                             <div class="default-btn_v2">
@@ -190,17 +216,17 @@ get_header(); ?>
                 </a>
             </div>
             <div class="grid-item rect-box">
-                <a href="#">
+                <a href="<?php echo $slot3['link']; ?>">
                     <div class="featured-collection">
                         <div class="background-image-container">
                             <div class="img-holder">
-                                <img src="images/collection_1.png" alt="">
+                                <img src="<?php echo $slot3['img']; ?>" alt="<?php echo $slot3['alt']; ?>">
                             </div>
                         </div>
                         <div class="content-box">
                             <div class="main-title">
                                 <h2 class="title">
-                                    Men Collection
+                                    <?php echo $slot3['name']; ?> Collection
                                 </h2>
                             </div>
                             <div class="default-btn_v2">
@@ -218,98 +244,75 @@ get_header(); ?>
                     </div>
                 </a>
             </div>
-            <div class="grid-item small-box">
-                <div class="featured-collection">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="grid-item small-box">
-                <div class="featured-collection">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="grid-item small-box">
-                <div class="featured-collection">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
+            <?php
+            $product_array =   array(
+                'post_type' => 'product',
+                'posts_per_page' => 4,
+            );
+            $product_query = new WP_Query($product_array);
+            if ($product_query->have_posts()) :
+                while ($product_query->have_posts()) : $product_query->the_post();
+            ?>
+                    <div class="grid-item small-box">
+                        <div class="featured-collection">
+                            <div class="product-item">
+                                <a href="<?php the_permalink(); ?>" title="">
+                                    <div class="img-holder">
+                                        <?php if (has_post_thumbnail()) :
+                                            the_post_thumbnail();
+                                        endif; ?>
+                                    </div>
+                                </a>
+                                <div class="product-detail">
+                                    <div class="product-name">
+                                        <h3><?php the_title(); ?></h3>
+                                    </div>
+                                    <div class="product-price">
+                                        <?php
+                                        global $product;
+
+                                        if ($product->is_type('variable')) {
+                                            // For Variable Products: Get the minimum variation price
+                                            $regular_price = $product->get_variation_regular_price('min', true);
+                                            $sale_price    = $product->get_variation_sale_price('min', true);
+                                        } else {
+                                            // For Simple Products
+                                            $regular_price = $product->get_regular_price();
+                                            $sale_price    = $product->get_sale_price();
+                                        }
+
+                                        if ($product->is_on_sale()) : ?>
+                                            <span>
+                                                <del><?php echo wc_price($regular_price); ?></del>
+                                                <span class="discounted"><?php echo wc_price($sale_price); ?></span>
+                                            </span>
+                                        <?php else : ?>
+                                            <span><?php echo wc_price($product->get_price()); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="grid-item small-box">
-                <div class="featured-collection">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php endwhile;
+                wp_reset_postdata();
+            endif; ?>
             <div class="grid-item big-box">
-                <a href="#">
+                <a href="<?php echo $slot4['link']; ?>'">
                     <div class="featured-collection">
                         <div class="background-image-container">
                             <div class="img-holder">
-                                <img src="images/shop-this.png" alt="">
+                                <img src="<?php echo $slot4['img']; ?>" alt="<?php echo $slot4['alt']; ?>">
                             </div>
                         </div>
                         <div class="content-box">
                             <div class="main-title">
                                 <h2 class="title">
-                                    Men Collection
+                                    <?php echo $slot4['name']; ?> Collection
                                 </h2>
                             </div>
                             <div class="text-box">
-                                <p>Every piece is made to last beyond the season</p>
+                                <p><?php echo $slot4['desc']; ?></p>
                             </div>
                             <div class="default-btn_v2">
                                 <span class="underline">Shop Collection
@@ -345,214 +348,68 @@ get_header(); ?>
         </div>
         <div class="product-listing">
             <div class="row gy-4 gx-3">
-                <div class="col-lg-2 col-md-3 col-6">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
+                <?php
+                $popular_product_array =   array(
+                    'post_type' => 'product',
+                    'posts_per_page' => 4,
+                    'tax_query' => array(
+                        array(
+                            'taxonomy' => 'product_cat',
+                            'field' => 'slug',
+                            'terms' => 'popular',
+                        )
+                    )
+                );
+                $popular_product_query = new WP_Query($popular_product_array);
+                if ($popular_product_query->have_posts()) :
+                    while ($popular_product_query->have_posts()) : $popular_product_query->the_post();
+                ?>
+                        <div class="col-lg-2 col-md-3 col-6">
+                            <div class="product-item">
+                                <a href="<?php the_permalink(); ?>">
+                                    <div class="img-holder">
+                                        <?php if (has_post_thumbnail()) :
+                                            the_post_thumbnail();
+                                        endif; ?>
+                                    </div>
+                                </a>
+                                <div class="product-detail">
+                                    <div class="product-name">
+                                        <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                                    </div>
+                                    <div class="product-price">
+                                        <?php
+                                        global $product;
+
+                                        if ($product->is_type('variable')) {
+                                            // For Variable Products: Get the minimum variation price
+                                            $regular_price = $product->get_variation_regular_price('min', true);
+                                            $sale_price    = $product->get_variation_sale_price('min', true);
+                                        } else {
+                                            // For Simple Products
+                                            $regular_price = $product->get_regular_price();
+                                            $sale_price    = $product->get_sale_price();
+                                        }
+
+                                        if ($product->is_on_sale()) : ?>
+                                            <span>
+                                                <del><?php echo wc_price($regular_price); ?></del>
+                                                <span class="discounted"><?php echo wc_price($sale_price); ?></span>
+                                            </span>
+                                        <?php else : ?>
+                                            <span><?php echo wc_price($regular_price); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <div class="product-item">
-                        <a href="#" title="">
-                            <div class="img-holder">
-                                <img src="images/product_1.png" alt="">
-                            </div>
-                        </a>
-                        <div class="product-detail">
-                            <div class="product-name">
-                                <h3><a href="#">Men's Motion Scramble Mid Lace-Up Waterproof Hiker</a></h3>
-                            </div>
-                            <div class="product-price">
-                                <span><del>$150.00</del> <span class="discounted">$140.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php endwhile;
+                    wp_reset_postdata();
+                endif; ?>
             </div>
-            <div class="default-btn dark-bg">
-                <a href="#" title="">View All</a>
-            </div>
+        </div>
+        <div class="default-btn dark-bg">
+            <a href="#" title="">View All</a>
         </div>
     </div>
 </section>
@@ -573,13 +430,13 @@ get_header(); ?>
         <div class="masked-bg">
             <div class="background-image-container blur-bg">
                 <div class="img-holder">
-                    <img src="images/shop-this.png" alt="">
+                    <img src="<?php echo get_template_directory_uri(); ?>/images/shop-this.png" alt="">
                 </div>
             </div>
             <div class="d-flex justify-content-center">
                 <div class="masked-img">
                     <div class="img-holder">
-                        <img src="images/shop-this.png" alt="">
+                        <img src="<?php echo get_template_directory_uri(); ?>/images/shop-this.png" alt="">
                     </div>
                     <div class="product-1 masked-product">
 
@@ -598,7 +455,7 @@ get_header(); ?>
 
                             <div class="img-holder">
                                 <a href="#" title="">
-                                    <img src="images/product_1.png" alt="">
+                                    <img src="<?php echo get_template_directory_uri(); ?>/images/product_1.png" alt="">
                                 </a>
                             </div>
                             <div class="product-detail">
@@ -637,7 +494,7 @@ get_header(); ?>
 
                             <div class="img-holder">
                                 <a href="#" title="">
-                                    <img src="images/product_1.png" alt="">
+                                    <img src="<?php echo get_template_directory_uri(); ?>/images/product_1.png" alt="">
                                 </a>
                             </div>
                             <div class="product-detail">
@@ -678,14 +535,15 @@ get_header(); ?>
                     <p>Promotions, new products and sales. Directly to your inbox.</p>
                 </div>
                 <div class="subscribe-form">
-                    <div class="d-flex">
-                        <div class="input-field">
-                            <input type="email" placeholder="Enter email address">
-                        </div>
-                        <div class="submit-field">
-                            <input type="submit" value="Subscribe">
-                        </div>
-                    </div>
+                    <?php
+                    $shortcode = do_shortcode('[contact-form-7 id="c62adee" title="contact form email"]');
+                    if (! empty($shortcode)) {
+                        echo $shortcode;
+                    } else {
+                        // Fallback static HTML so it doesn't look empty before setup
+                        echo '<p>Please add a shortcode in the Customizer.</p>';
+                    }
+                    ?>
                 </div>
             </div>
         </div>
