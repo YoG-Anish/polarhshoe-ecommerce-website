@@ -5,25 +5,24 @@
                 <div class="col-lg-3">
                     <div class="footer-details">
                         <div class="site-logo">
-                            <a href="index.php"><span class="red-text">Polar</span> Shoes</a>
+                            <a href="<?php echo esc_url(home_url('/')); ?>"><?php echo get_theme_mod('footer_main_title'); ?></a>
                         </div>
                         <div class="footer-info">
                             <div class="footer-item">
-                                <span>Address:</span>
-                                <p>1234 Fashion Street, Suite 567,
-                                    New York, NY 10001</p>
+                                <span><?php echo get_theme_mod('footer_address_text'); ?></span>
+                                <p><?php echo get_theme_mod('footer_address'); ?></p>
                             </div>
                             <div class="footer-item">
-                                <span>Email:</span>
-                                <a href="mailto:info@polarshoes.com">info@polarshoes.com</a>
+                                <span><?php echo get_theme_mod('footer_email_text'); ?></span>
+                                <a href="<?php echo get_theme_mod('footer_email'); ?>"><?php echo get_theme_mod('footer_email'); ?></a>
                             </div>
                             <div class="footer-item">
-                                <span>Phone:</span>
-                                <a href="#">(212) 98765 43210</a>
+                                <span><?php echo get_theme_mod('footer_phone_text'); ?></span>
+                                <a href="#"><?php echo get_theme_mod('footer_phone_number'); ?></a>
                             </div>
                             <div class="default-btn_v2">
                                 <a href="#" title="">
-                                    Get direction
+                                    <?php echo get_theme_mod('footer_get_direction_text'); ?>
                                     <span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"
                                             viewBox="0 0 10 10" fill="none">
@@ -35,112 +34,68 @@
                             </div>
                         </div>
                         <div class="social-links d-flex align-items-center gap-4">
-                            <a href="#" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-                            <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="#" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
-                            <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
-                            <a href="#" target="_blank"><i class="fa-brands fa-pinterest-p"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4">
-                    <div class="footer-menu">
-                        <div class="footer-title">
-                            <h3>SHOP</h3>
-                        </div>
-                        <ul class="footer-list list-none ps-0 mb-0">
-                            <li>
-                                <a href="#">Mens</a>
-                            </li>
-                            <li>
-                                <a href="#">Womens</a>
-                            </li>
-                            <li>
-                                <a href="#">Workwear
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">Kids</a>
-                            </li>
-                            <li>
-                                <a href="#">The Original Yellow Boot
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">Gift Timberland
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">Discounts & Promotions</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4">
-                    <div class="footer-menu">
-                        <div class="footer-title">
-                            <h3>Help</h3>
-                        </div>
-                        <ul class="footer-list list-none ps-0 mb-0">
-                            <li>
-                                <a href="#">Privacy Policy
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">Returns + Exchanges
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">Shipping
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">Terms & Conditions
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">FAQ’s
+                            <?php
+                            // Define the platform slug and its corresponding FontAwesome icon class
+                            $socials = array(
+                                'facebook'  => 'fa-facebook-f',
+                                'instagram' => 'fa-instagram',
+                                'twitter'   => 'fa-x-twitter',
+                                'youtube'   => 'fa-youtube',
+                                'pinterest' => 'fa-pinterest-p',
+                            );
 
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">Compare
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">My Wishlist</a>
-                            </li>
-                        </ul>
+                            foreach ($socials as $key => $icon) :
+                                // Get the value from the Customizer
+                                $url = get_theme_mod("polar_{$key}_url");
+
+                                // Only show the <a> tag if the URL is NOT empty
+                                if (! empty($url)) : ?>
+                                    <a href="<?php echo esc_url($url); ?>" target="_blank">
+                                        <i class="fa-brands <?php echo esc_attr($icon); ?>"></i>
+                                    </a>
+                            <?php endif;
+                            endforeach; ?>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-4">
                     <div class="footer-menu">
                         <div class="footer-title">
-                            <h3>About us</h3>
+                            <h3><?php echo get_theme_mod('footer_menu_1'); ?>  </h3>
                         </div>
-                        <ul class="footer-list list-none ps-0 mb-0">
-                            <li>
-                                <a href="#">Our Story
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">Visit Our Store
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">Contact Us
+                        <?php
+                        wp_nav_menu(array(
+                            'theme_location' => 'footer_menu_1',
+                            'menu_class' => 'footer-list list-none ps-0 mb-0',
+                        ))
+                        ?>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <div class="footer-menu">
+                        <div class="footer-title">
+                            <h3><?php echo get_theme_mod('footer_menu_2'); ?></h3>
+                        </div>
+                        <?php
+                        wp_nav_menu(array(
+                            'theme_location' => 'footer_menu_2',
+                            'menu_class' => 'footer-list list-none ps-0 mb-0',
+                        ))
+                        ?>
 
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">About Us
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">Account
-                                </a>
-                            </li>
-                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <div class="footer-menu">
+                        <div class="footer-title">
+                            <h3><?php echo get_theme_mod('footer_menu_3'); ?></h3>
+                        </div>
+                        <?php
+                        wp_nav_menu(array(
+                            'theme_location' => 'footer_menu_3',
+                            'menu_class' => 'footer-list list-none ps-0 mb-0',
+                        ))
+                        ?>
                     </div>
                 </div>
             </div>
@@ -148,7 +103,7 @@
         <div class="bot-footer">
             <div class="d-flex align-items-center justify-content-sm-between justify-content-center row-gap-3 flex-wrap">
                 <div class="copywrite">
-                    <p>© 2024 Polarshoes . All rights reserved.</p>
+                    <p>© <?php echo date('Y'); ?> <?php bloginfo('name'); ?> . <?php echo get_theme_mod('footer_copyright_text'); ?></p>
                 </div>
                 <div class="partner">
                     <div class="d-flex gap-3">

@@ -263,8 +263,3 @@ $(document).ready(function(){
     });
     
 });
-
-new Splide('#hiking-essentials-slider', {
-  perPage: 5,
-  rewind : true,
-}).mount();
