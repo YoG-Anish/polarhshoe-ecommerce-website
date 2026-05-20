@@ -61,7 +61,7 @@
                 <div class="col-lg-3 col-md-4">
                     <div class="footer-menu">
                         <div class="footer-title">
-                            <h3><?php echo get_theme_mod('footer_menu_1'); ?>  </h3>
+                            <h3><?php echo get_theme_mod('footer_menu_1'); ?> </h3>
                         </div>
                         <?php
                         wp_nav_menu(array(
@@ -115,6 +115,7 @@
             </div>
         </div>
     </div>
+   
 </footer>
 
 

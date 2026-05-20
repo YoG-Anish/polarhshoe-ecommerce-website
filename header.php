@@ -18,7 +18,7 @@
                         <p>Spring Fashion Sale: Time to refresh your wardrobe.</p>
                     </div>
                     <div class="shop-now">
-                        <a href="#" title="">
+                        <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" title="">
                             Shop now
                             <span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"
@@ -162,20 +162,28 @@
 
                                 <!-- 2. WISHLIST ICON (Ready for a plugin later) -->
                                 <li>
-                                    <a href="#">
-                                        <div class="wishlist">
-                                            <div class="icon">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="22" viewBox="0 0 25 22" fill="none">
-                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0188 3.46318C9.81581 0.839444 6.1345 0.0285975 3.37423 2.43115C0.613948 4.8337 0.225338 8.85061 2.393 11.6921C4.19527 14.0546 9.64955 19.0374 11.4372 20.6502C11.6371 20.8306 11.7371 20.9208 11.8538 20.9562C11.9555 20.9871 12.067 20.9871 12.1688 20.9562C12.2855 20.9208 12.3854 20.8306 12.5855 20.6502C14.3731 19.0374 19.8273 14.0546 21.6296 11.6921C23.7972 8.85061 23.456 4.80843 20.6483 2.43115C17.8406 0.0538712 14.2219 0.839444 12.0188 3.46318Z" stroke="#2A2A2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                </svg>
+                                    <?php if (function_exists('YITH_WCWL')) : ?>
+                                        <a href="<?php echo esc_url(YITH_WCWL()->get_wishlist_url()); ?>" title="My Wishlist">
+                                            <div class="wishlist" style="position: relative;">
+                                                <div class="icon">
+                                                    <!-- Your original Figma SVG -->
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="22" viewBox="0 0 25 22" fill="none">
+                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0188 3.46318C9.81581 0.839444 6.1345 0.0285975 3.37423 2.43115C0.613948 4.8337 0.225338 8.85061 2.393 11.6921C4.19527 14.0546 9.64955 19.0374 11.4372 20.6502C11.6371 20.8306 11.7371 20.9208 11.8538 20.9562C11.9555 20.9871 12.067 20.9871 12.1688 20.9562C12.2855 20.9208 12.3854 20.8306 12.5855 20.6502C14.3731 19.0374 19.8273 14.0546 21.6296 11.6921C23.7972 8.85061 23.456 4.80843 20.6483 2.43115C17.8406 0.0538712 14.2219 0.839444 12.0188 3.46318Z" stroke="#2A2A2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                </div>
+
+                                                <!-- Dynamic Count Badge -->
+                                                <span class="wishlist-count">
+                                                    <?php echo yith_wcwl_count_products(); ?>
+                                                </span>
                                             </div>
-                                        </div>
-                                    </a>
+                                        </a>
+                                    <?php endif; ?>
                                 </li>
 
                                 <!-- 3. DYNAMIC CART ICON -->
                                 <li>
-                                    <a href="<?php echo esc_url(wc_get_cart_url()); ?>" title="View Cart">
+                                    <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="xoo-wsc-cart-trigger" title="View Cart">
                                         <div class="cart" style="position: relative;">
 
                                             <!-- Your original Cart SVG -->
