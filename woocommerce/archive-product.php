@@ -81,69 +81,85 @@ do_action('woocommerce_before_main_content');
                 ?>
             </div>
         </div>
-    </div>
 
-    
 
-    <div class="product-listing">
-        <div class="row gy-5">
-            <?php
-            /**
-             * Hook: woocommerce_shop_loop_header.
-             *
-             * @since 8.6.0
-             *
-             * @hooked woocommerce_product_taxonomy_archive_header - 10
-             */
-            do_action('woocommerce_shop_loop_header');
 
-            if (woocommerce_product_loop()) {
 
+        <div class="product-listing">
+            <div class="row gy-5">
+                <!-- 2. SELECTED TAGS & PRODUCT COUNT AREA -->
+                <div class="product-filter-grid mt-4">
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div class="filter-result">
+                            <?php
+                            /**
+                             * This shortcode calls ONLY the active tags like "Black x".
+                             * It does not include the dropdowns or the sorting.
+                             */
+                            echo do_shortcode('[woof_search_options]');
+                            ?>
+                        </div>
+
+                        <div class="no-of-product">
+                            <?php woocommerce_result_count(); // Displays "18 Products" 
+                            ?>
+                        </div>
+
+                    </div>
+                </div>
+
+                <?php
                 /**
-                 * Hook: woocommerce_before_shop_loop.
+                 * Hook: woocommerce_shop_loop_header.
                  *
-                 * @hooked woocommerce_output_all_notices - 10
-                 * @hooked woocommerce_result_count - 20
-                 * @hooked woocommerce_catalog_ordering - 30
+                 * @since 8.6.0
+                 *
+                 * @hooked woocommerce_product_taxonomy_archive_header - 10
                  */
-                do_action('woocommerce_before_shop_loop');
+                do_action('woocommerce_shop_loop_header');
 
-                woocommerce_product_loop_start();
+                if (woocommerce_product_loop()) {
 
-                if (wc_get_loop_prop('total')) {
-                    while (have_posts()) {
-                        the_post();
 
-                        /**
-                         * Hook: woocommerce_shop_loop.
-                         */
-                        do_action('woocommerce_shop_loop');
 
-                        wc_get_template_part('content', 'product');
+                    woocommerce_product_loop_start();
+
+                    if (wc_get_loop_prop('total')) {
+                        while (have_posts()) {
+                            the_post();
+
+                            /**
+                             * Hook: woocommerce_shop_loop.
+                             */
+                            do_action('woocommerce_shop_loop');
+
+                            wc_get_template_part('content', 'product');
+                        }
                     }
-                }
 
-                woocommerce_product_loop_end();
+                    woocommerce_product_loop_end();
 
-                /**
-                 * Hook: woocommerce_after_shop_loop.
-                 *
-                 * @hooked woocommerce_pagination - 10
-                 */
-                do_action('woocommerce_after_shop_loop');
-            } else {
-                /**
-                 * Hook: woocommerce_no_products_found.
-                 *
-                 * @hooked wc_no_products_found - 10
-                 */
-                do_action('woocommerce_no_products_found');
-            } ?>
+                    /**
+                     * Hook: woocommerce_after_shop_loop.
+                     *
+                     * @hooked woocommerce_pagination - 10
+                     */
+                    do_action('woocommerce_after_shop_loop');
+                } else {
+                    /**
+                     * Hook: woocommerce_no_products_found.
+                     *
+                     * @hooked wc_no_products_found - 10
+                     */
+                    do_action('woocommerce_no_products_found');
+                } ?>
 
-        </div>
+            </div>
 
-        <div class="pagination-wrapper mt-5">
-            <?php woocommerce_pagination(); ?>
+            <div class="pagination-wrapper mt-5">
+                <?php woocommerce_pagination(); ?>
+            </div>
         </div>
     </div>
 </section>
@@ -156,11 +172,5 @@ do_action('woocommerce_before_main_content');
  */
 do_action('woocommerce_after_main_content');
 
-/**
- * Hook: woocommerce_sidebar.
- *
- * @hooked woocommerce_get_sidebar - 10
- */
-do_action('woocommerce_sidebar');
 
 get_footer('shop');

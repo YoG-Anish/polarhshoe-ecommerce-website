@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The template for displaying product content within loops
  *
@@ -15,18 +16,21 @@
  * @version 9.4.0
  */
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 global $product;
 
 // Check if the product is a valid WooCommerce product and ensure its visibility before proceeding.
-if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
-	return;
+if (! is_a($product, WC_Product::class) || ! $product->is_visible()) {
+    return;
 }
 ?>
 
-<div <?php wc_product_class( 'col-lg-2 col-md-3 col-6 product-grid-item', $product ); ?>>
+<div <?php wc_product_class('col-lg-2 col-md-3 col-6 product-grid-item', $product); ?>>
     <div class="product-item">
+        <div class="wishlist-icon">
+            <?php echo do_shortcode('[yith_wcwl_add_to_wishlist]'); ?>
+        </div>
         <a href="<?php the_permalink(); ?>">
             <div class="img-holder" style="background: #f6f6f6; padding: 20px;">
                 <?php the_post_thumbnail('woocommerce_thumbnail', ['class' => 'img-fluid']); ?>
@@ -45,5 +49,6 @@ if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
         <div class="add-to-cart mt-2">
             <?php woocommerce_template_loop_add_to_cart(); ?>
         </div>
+        
     </div>
 </div>

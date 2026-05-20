@@ -348,3 +348,76 @@ remove_action('woocommerce_after_single_product_summary', 'woocommerce_upsell_di
 remove_action('woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20);
 
 remove_action('woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
+
+add_filter( 'woocommerce_show_page_title', '__return_false' );
+
+/**
+ * Strip the shop loop hook so it ONLY shows Husky active filters
+ */
+add_action( 'wp', 'polarshoe_clean_loop_hook' );
+
+function polarshoe_clean_loop_hook() {
+    // 1. Remove the "Showing 1–18 of 40 results" text
+    remove_action( 'woocommerce_before_shop_loop', 'woocommerce_result_count', 20 );
+
+    // 2. Remove the default sorting dropdown
+    remove_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30 );
+}
+
+
+
+/**
+ * Ensure the custom header cart count updates via AJAX
+ */
+add_filter( 'woocommerce_add_to_cart_fragments', 'polarshoe_header_add_to_cart_fragment' );
+
+function polarshoe_header_add_to_cart_fragment( $fragments ) {
+    ob_start();
+    ?>
+    <!-- This must match your exact HTML inside the <span> tag -->
+    <span class="cart-count" style="position: absolute; top: -8px; right: -12px; background: #E63946; color: #fff; font-size: 11px; font-weight: bold; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <?php echo WC()->cart->get_cart_contents_count(); ?>
+    </span>
+    <?php
+    $fragments['span.cart-count'] = ob_get_clean();
+    
+    return $fragments;
+}
+
+add_action( 'wp_footer', function() {
+    ?>
+    <script type="text/javascript">
+        (function($) {
+            'use strict';
+            
+            // This function fetches the count and updates the HTML
+            function update_wishlist_count() {
+                $.ajax({
+                    url: '<?php echo admin_url( 'admin-ajax.php' ); ?>',
+                    type: 'POST',
+                    data: {
+                        action: 'yith_wcwl_update_wishlist_count'
+                    },
+                    success: function(data) {
+                        // This updates the red badge in your header
+                        $('.wishlist-count').html(data.count);
+                        
+                        // Hide badge if count is 0, show if > 0
+                        if(data.count > 0) {
+                            $('.wishlist-count').show();
+                        } else {
+                            $('.wishlist-count').hide();
+                        }
+                    }
+                });
+            }
+
+            // Listen for YITH events
+            $(document).on('added_to_wishlist removed_from_wishlist', function() {
+                update_wishlist_count();
+            });
+
+        })(jQuery);
+    </script>
+    <?php
+}, 99 );
