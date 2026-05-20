@@ -12,7 +12,7 @@ function polarshoe_enqueue_styles()
     wp_enqueue_script('polarshoe-jquery-min', get_template_directory_uri() . '/js/jquery.min.js', array(), null, true);
     wp_enqueue_script('polarshoe-bootstrap', get_template_directory_uri() . '/js/bootstrap.js', array('polarshoe-jquery-min'), null, true);
     wp_enqueue_script('polarshoe-splide-min', get_template_directory_uri() . '/js/splide.min.js', array(), null, true);
-    wp_enqueue_script('polarshoe-script', get_template_directory_uri() . '/js/script.js', array('polarshoe-jquery-min', 'polarshoe-splide-min'), null, true);
+    wp_enqueue_script('polarshoe-main-script', get_template_directory_uri() . '/js/script.js', array('polarshoe-jquery-min', 'polarshoe-splide-min', 'jquery'), '1.0', true);
     wp_enqueue_script('polarshoe-wow-min', get_template_directory_uri() . '/js/wow.min.js', array('polarshoe-jquery-min'), null, true);
     wp_enqueue_script('polarshoe-jquery-fancybox-min', get_template_directory_uri() . '/js/jquery.fancybox.min.js', array('polarshoe-jquery-min'), null, true);
 }
@@ -129,7 +129,7 @@ function polar_shoes_featured_customizer($wp_customize)
         'section' => 'footer_section_settings',
         'type' => 'text'
     ));
- 
+
     //footer address text and address
     $wp_customize->add_setting('footer_address_text', array(
         'default' => '',
@@ -147,7 +147,7 @@ function polar_shoes_featured_customizer($wp_customize)
         'section' => 'footer_section_settings',
         'type' => 'text'
     ));
-   
+
 
     //footer phone text and number
     $wp_customize->add_setting('footer_phone_text', array(
@@ -194,7 +194,7 @@ function polar_shoes_featured_customizer($wp_customize)
         'section' => 'footer_section_settings',
         'type' => 'text'
     ));
-    
+
     //footer get direaction page link url
     $wp_customize->add_setting('footer_get_direction_page_link', array(
         'default' => '',
@@ -206,23 +206,23 @@ function polar_shoes_featured_customizer($wp_customize)
     ));
 
     //footer all social links and image
-    $wp_customize->add_section( 'polar_social_section' , array(
-        'title'      => __( 'Social Media Links', 'polar-shoes' ),
+    $wp_customize->add_section('polar_social_section', array(
+        'title'      => __('Social Media Links', 'polar-shoes'),
         'priority'   => 100,
-    ) );
+    ));
 
     // List of platforms to create settings for
     $social_platforms = array('facebook', 'instagram', 'twitter', 'youtube', 'pinterest');
 
-    foreach($social_platforms as $platform) {
-        $wp_customize->add_setting( "polar_{$platform}_url", array('default' => '') );
-        $wp_customize->add_control( "polar_{$platform}_url", array(
+    foreach ($social_platforms as $platform) {
+        $wp_customize->add_setting("polar_{$platform}_url", array('default' => ''));
+        $wp_customize->add_control("polar_{$platform}_url", array(
             'label'    => ucfirst($platform) . ' URL',
             'section'  => 'footer_section_settings',
             'type'     => 'url', // Ensures it's a valid link
-        ) );
+        ));
     }
-    
+
     //footer menus
     $wp_customize->add_setting('footer_menu_1', array(
         'default' => '',
@@ -260,7 +260,6 @@ function polar_shoes_featured_customizer($wp_customize)
         'section' => 'footer_section_settings',
         'type' => 'text'
     ));
-
 }
 add_action('customize_register', 'polar_shoes_featured_customizer');
 
@@ -270,12 +269,13 @@ add_action('customize_register', 'polar_shoes_featured_customizer');
  * This function enables core features and ensures the client 
  * can manage images and galleries from the dashboard.
  */
-function polarshoe_woocommerce_setup() {
+function polarshoe_woocommerce_setup()
+{
 
     // 1. Declare WooCommerce Support
-    add_theme_support( 'woocommerce', array(
+    add_theme_support('woocommerce', array(
         'thumbnail_image_width'         => 600, // Dynamic: Client can crop in Customizer
-        'single_image_width'            => 800, 
+        'single_image_width'            => 800,
         'product_grid'                  => array(
             'default_rows'    => 3,
             'min_rows'        => 1,
@@ -284,16 +284,16 @@ function polarshoe_woocommerce_setup() {
             'min_columns'     => 1,
             'max_columns'     => 6,
         ),
-    ) );
+    ));
 
     // 2. Enable Product Gallery Features (Critical for your Figma Product Page)
     // These allow the client to have a professional zoom/slider without extra plugins
-    add_theme_support( 'wc-product-gallery-zoom' );     // Hover to zoom on shoes
-    add_theme_support( 'wc-product-gallery-lightbox' ); // Click to see full-screen shoe
-    add_theme_support( 'wc-product-gallery-slider' );   // Swipe through shoe angles
-    
+    add_theme_support('wc-product-gallery-zoom');     // Hover to zoom on shoes
+    add_theme_support('wc-product-gallery-lightbox'); // Click to see full-screen shoe
+    add_theme_support('wc-product-gallery-slider');   // Swipe through shoe angles
+
 }
-add_action( 'after_setup_theme', 'polarshoe_woocommerce_setup' );
+add_action('after_setup_theme', 'polarshoe_woocommerce_setup');
 
 /**
  * 3. Dynamic Header Cart Update (AJAX)
@@ -301,49 +301,50 @@ add_action( 'after_setup_theme', 'polarshoe_woocommerce_setup' );
  * the number in your header navigation updates automatically 
  * without refreshing the page.
  */
-add_filter( 'woocommerce_add_to_cart_fragments', 'polarshoe_cart_count_fragments' );
-function polarshoe_cart_count_fragments( $fragments ) {
+add_filter('woocommerce_add_to_cart_fragments', 'polarshoe_cart_count_fragments');
+function polarshoe_cart_count_fragments($fragments)
+{
     ob_start();
-    ?>
+?>
     <span class="cart-count">
         <?php echo WC()->cart->get_cart_contents_count(); ?>
     </span>
-    <?php
+<?php
     $fragments['span.cart-count'] = ob_get_clean();
     return $fragments;
 }
 
 
 // Remove default WooCommerce wrappers
-remove_action( 'woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
-remove_action( 'woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
+remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
+remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
 
 // remove woocommerce breadcrumb
-remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 );
+remove_action('woocommerce_before_main_content', 'woocommerce_breadcrumb', 20);
 // Change "Related Products" to "People Also Bought"
-add_filter( 'woocommerce_product_related_products_heading', function() {
+add_filter('woocommerce_product_related_products_heading', function () {
     return 'People Also Bought';
 });
 
 // Remove default WooCommerce components from the summary hook
-remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
-remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_rating', 10 );
-remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price', 10 );
-remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
-remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
-remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40 );
-remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_sharing', 50 );
+remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_title', 5);
+remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_rating', 10);
+remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_price', 10);
+remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20);
+remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30);
+remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
+remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_sharing', 50);
 
 // 1. Stop double Images
-    remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
+remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20);
 
-    // 2. Stop double Tabs/Description
-    remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10 );
+// 2. Stop double Tabs/Description
+remove_action('woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10);
 
-    // 3. Stop double Upsells (You might see these too)
-    remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
+// 3. Stop double Upsells (You might see these too)
+remove_action('woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15);
 
-    // 4. Stop double Related Products
-    remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
+// 4. Stop double Related Products
+remove_action('woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20);
 
-    remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
+remove_action('woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
