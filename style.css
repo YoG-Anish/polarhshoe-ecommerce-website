@@ -277,8 +277,8 @@ a {
 .site-footer {
     background-color: var(--text-color);
     color: #fff;
-    padding-top: 180px;
-    margin-top: -180px;
+/*     padding-top: 180px;
+    margin-top: -180px; */
 }
 
 .site-footer .site-logo a{
@@ -1101,7 +1101,7 @@ a {
 
 .main-product-img {
     background-color: #F1F1F1;
-    position: sticky;
+/*     position: sticky; */
     top: 0;
     padding: 0 50px 50px 0;
 }
@@ -1435,3 +1435,77 @@ a {
     text-align: center;
 }
 /*End 404 Page CSS*/
+
+
+/*  New CSS Added By Sabin */
+
+img.attachment-woocommerce_thumbnail.size-woocommerce_thumbnail,
+img.attachment-post-thumbnail.size-post-thumbnail.wp-post-image {
+  aspect-ratio: 18/20;
+  object-position: center;
+  object-fit: cover;
+}
+section.popular-product-section.section-gaps.bluish-bg .default-btn {
+  text-align: center;
+  margin-top: 50px;
+}
+
+form.wpcf7-form.init
+  .d-flex
+  .input-field
+  .wpcf7-form-control-wrap
+  .wpcf7-form-control {
+  padding: 15px;
+}
+.subscribe-section{
+	background-image: linear-gradient(to bottom, #ffffff 50%, #2A2A2A 50%);
+}
+
+/* Cart Variations for individual Product  */
+.variations {
+    width: 100%;
+}
+
+.variations tr {
+    display: block;
+    margin-bottom: 30px;
+    
+}
+
+.variations th.label {
+    display: block;
+    font-family: 'Quicksand', sans-serif !important;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1;
+    letter-spacing: 0%;
+    color:#2A2A2A ;
+    margin-bottom:10px;
+
+}
+.reset_variations {
+    display: none !important;
+}
+
+button.single_add_to_cart_button.button.alt {
+    padding:13px;
+    border:none;
+    width:100%;
+    max-width:360px;
+    background:#2A2A2A;
+    color: #FFFFFF;
+    margin-top: 50px;
+
+    /* Font */
+    font-family: "Outfit", sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+section.main-product-section {
+    background: linear-gradient(to right, #F1F1F1 50%, #ffffff 50%);
+}
+

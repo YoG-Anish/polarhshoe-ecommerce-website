@@ -263,3 +263,67 @@ $(document).ready(function(){
     });
     
 });
+
+// Delegated quantity handler (added separately so existing JS is not modified)
+(function () {
+    'use strict';
+
+    // Use capture so this runs before other bubble-phase handlers and prevents duplicates
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.quantity-up, .quantity-down, .quantity-button');
+        if (!btn) return;
+
+        // Find the closest quantity container
+        var qtyContainer = btn.closest('.quantity') || btn.closest('.product-quantity');
+        if (!qtyContainer) return;
+
+        // Find the input (prefer .qty used by WooCommerce)
+        var input = qtyContainer.querySelector('input.qty') || qtyContainer.querySelector('input[type="number"]');
+        if (!input) return;
+
+        // Determine direction
+        var isUp = btn.classList.contains('quantity-up') || (btn.classList.contains('quantity-button') && btn.textContent.trim() === '+');
+
+        e.preventDefault();
+        // Stop other handlers from also handling this click
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        e.stopPropagation();
+
+        var step = parseFloat(input.getAttribute('step')) || 1;
+        var minAttr = input.getAttribute('min');
+        var maxAttr = input.getAttribute('max');
+        var min = (minAttr !== null && minAttr !== '') ? parseFloat(minAttr) : 0;
+        var max = (maxAttr !== null && maxAttr !== '') ? parseFloat(maxAttr) : null;
+
+        var cur = parseFloat(input.value);
+        if (isNaN(cur)) cur = 0;
+
+        var newVal = isUp ? cur + step : cur - step;
+        if (max !== null && newVal > max) newVal = max;
+        if (!isNaN(min) && newVal < min) newVal = min;
+
+        input.value = newVal;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+
+        // Update nearby quantity text if present (theme uses a sibling div showing "Quantity: X")
+        try {
+            var pq = qtyContainer.closest('.product-quantity');
+            if (pq) {
+                var label = pq.querySelector('div:first-child');
+                if (label && label.textContent.trim().toLowerCase().indexOf('quantity') !== -1) {
+                    label.textContent = 'Quantity: ' + newVal;
+                }
+                var priceSpan = pq.querySelector('.product-price span');
+                if (priceSpan) {
+                    var unit = parseFloat(priceSpan.getAttribute('data-unit-price'));
+                    if (isNaN(unit)) unit = 160; // fallback used previously in theme
+                    priceSpan.textContent = '$' + (newVal * unit).toFixed(2);
+                }
+            }
+        } catch (err) {
+            // ignore
+        }
+
+    }, true);
+
+})();
