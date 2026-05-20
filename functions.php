@@ -9,14 +9,46 @@ function polarshoe_enqueue_styles()
     wp_enqueue_style('polarshoe-style', get_stylesheet_uri());
     wp_enqueue_style('polarshoe-responsive', get_template_directory_uri() . '/css/responsive.css');
 
-    wp_enqueue_script('polarshoe-jquery-min', get_template_directory_uri() . '/js/jquery.min.js', array(), null, true);
-    wp_enqueue_script('polarshoe-bootstrap', get_template_directory_uri() . '/js/bootstrap.js', array('polarshoe-jquery-min'), null, true);
-    wp_enqueue_script('polarshoe-splide-min', get_template_directory_uri() . '/js/splide.min.js', array(), null, true);
-    wp_enqueue_script('polarshoe-main-script', get_template_directory_uri() . '/js/script.js', array('polarshoe-jquery-min', 'polarshoe-splide-min', 'jquery'), '1.0', true);
-    wp_enqueue_script('polarshoe-wow-min', get_template_directory_uri() . '/js/wow.min.js', array('polarshoe-jquery-min'), null, true);
-    wp_enqueue_script('polarshoe-jquery-fancybox-min', get_template_directory_uri() . '/js/jquery.fancybox.min.js', array('polarshoe-jquery-min'), null, true);
+    // Use WordPress core jQuery. Remove the duplicate custom jquery.min.js to avoid hanging JS and AJAX issues.
+    wp_enqueue_script('jquery');
+    wp_enqueue_script('polarshoe-bootstrap', get_template_directory_uri() . '/js/bootstrap.js', array('jquery'), null, true);
+    wp_enqueue_script('polarshoe-splide-min', get_template_directory_uri() . '/js/splide.min.js', array('jquery'), null, true);
+    wp_enqueue_script('polarshoe-main-script', get_template_directory_uri() . '/js/script.js', array('jquery', 'polarshoe-splide-min'), '1.0', true);
+    wp_enqueue_script('polarshoe-wow-min', get_template_directory_uri() . '/js/wow.min.js', array('jquery'), null, true);
+    wp_enqueue_script('polarshoe-jquery-fancybox-min', get_template_directory_uri() . '/js/jquery.fancybox.min.js', array('jquery'), null, true);
+
+    wp_localize_script('polarshoe-main-script', 'polarshoe_ajax', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+    ));
 }
 add_action('wp_enqueue_scripts', 'polarshoe_enqueue_styles');
+
+/**
+ * 4. Update header cart count via WooCommerce AJAX fragments.
+ */
+function polarshoe_header_cart_fragment($fragments)
+{
+    ob_start();
+    ?>
+    <span class="cart-count" style="position: absolute; top: -8px; right: -12px; background: #E63946; color: #fff; font-size: 11px; font-weight: bold; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <?php echo WC()->cart ? WC()->cart->get_cart_contents_count() : 0; ?>
+    </span>
+    <?php
+    $fragments['span.cart-count'] = ob_get_clean();
+    return $fragments;
+}
+add_filter('woocommerce_add_to_cart_fragments', 'polarshoe_header_cart_fragment');
+
+/**
+ * 5. Return wishlist count for AJAX refresh after YITH add/remove.
+ */
+function polarshoe_wishlist_count()
+{
+    $count = function_exists('yith_wcwl_count_products') ? yith_wcwl_count_products() : 0;
+    wp_send_json_success(array('count' => intval($count)));
+}
+add_action('wp_ajax_polarshoe_wishlist_count', 'polarshoe_wishlist_count');
+add_action('wp_ajax_nopriv_polarshoe_wishlist_count', 'polarshoe_wishlist_count');
 
 // theme support
 function polarshoe_theme_setup()
@@ -301,20 +333,6 @@ add_action('after_setup_theme', 'polarshoe_woocommerce_setup');
  * the number in your header navigation updates automatically 
  * without refreshing the page.
  */
-add_filter('woocommerce_add_to_cart_fragments', 'polarshoe_cart_count_fragments');
-function polarshoe_cart_count_fragments($fragments)
-{
-    ob_start();
-?>
-    <span class="cart-count">
-        <?php echo WC()->cart->get_cart_contents_count(); ?>
-    </span>
-<?php
-    $fragments['span.cart-count'] = ob_get_clean();
-    return $fragments;
-}
-
-
 // Remove default WooCommerce wrappers
 remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
 remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
@@ -349,75 +367,22 @@ remove_action('woocommerce_after_single_product_summary', 'woocommerce_output_re
 
 remove_action('woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
 
-add_filter( 'woocommerce_show_page_title', '__return_false' );
+add_filter('woocommerce_show_page_title', '__return_false');
 
 /**
  * Strip the shop loop hook so it ONLY shows Husky active filters
  */
-add_action( 'wp', 'polarshoe_clean_loop_hook' );
+add_action('wp', 'polarshoe_clean_loop_hook');
 
-function polarshoe_clean_loop_hook() {
+function polarshoe_clean_loop_hook()
+{
     // 1. Remove the "Showing 1–18 of 40 results" text
-    remove_action( 'woocommerce_before_shop_loop', 'woocommerce_result_count', 20 );
+    remove_action('woocommerce_before_shop_loop', 'woocommerce_result_count', 20);
 
     // 2. Remove the default sorting dropdown
-    remove_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30 );
+    remove_action('woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30);
 }
 
 
 
-/**
- * Ensure the custom header cart count updates via AJAX
- */
-add_filter( 'woocommerce_add_to_cart_fragments', 'polarshoe_header_add_to_cart_fragment' );
 
-function polarshoe_header_add_to_cart_fragment( $fragments ) {
-    ob_start();
-    ?>
-    <!-- This must match your exact HTML inside the <span> tag -->
-    <span class="cart-count" style="position: absolute; top: -8px; right: -12px; background: #E63946; color: #fff; font-size: 11px; font-weight: bold; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-        <?php echo WC()->cart->get_cart_contents_count(); ?>
-    </span>
-    <?php
-    $fragments['span.cart-count'] = ob_get_clean();
-    
-    return $fragments;
-}
-
-add_action( 'wp_footer', function() {
-    ?>
-    <script type="text/javascript">
-        (function($) {
-            'use strict';
-            
-            // This function fetches the count and updates the HTML
-            function update_wishlist_count() {
-                $.ajax({
-                    url: '<?php echo admin_url( 'admin-ajax.php' ); ?>',
-                    type: 'POST',
-                    data: {
-                        action: 'yith_wcwl_update_wishlist_count'
-                    },
-                    success: function(data) {
-                        // This updates the red badge in your header
-                        $('.wishlist-count').html(data.count);
-                        
-                        // Hide badge if count is 0, show if > 0
-                        if(data.count > 0) {
-                            $('.wishlist-count').show();
-                        } else {
-                            $('.wishlist-count').hide();
-                        }
-                    }
-                });
-            }
-
-            // Listen for YITH events
-            $(document).on('added_to_wishlist removed_from_wishlist', function() {
-                update_wishlist_count();
-            });
-
-        })(jQuery);
-    </script>
-    <?php
-}, 99 );

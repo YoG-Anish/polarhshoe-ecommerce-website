@@ -1,3 +1,4 @@
+(function($){
 if ($('.product-slider').length > 0) {
     var productSlider = new Splide('.product-slider .splide', {
         perPage: 6,
@@ -327,4 +328,26 @@ $(document).ready(function(){
     }, true);
 
 })();
+
+function polarshoeRefreshWishlistCount() {
+    if (typeof polarshoe_ajax === 'undefined' || !polarshoe_ajax.ajax_url) {
+        return;
+    }
+
+    jQuery.post(polarshoe_ajax.ajax_url, { action: 'polarshoe_wishlist_count' }, function(response) {
+        if (response && response.success && typeof response.data.count !== 'undefined') {
+            jQuery('.wishlist-count').text(response.data.count);
+        }
+    }, 'json');
+}
+
+jQuery(function($) {
+    polarshoeRefreshWishlistCount();
+
+    $(document.body).on('added_to_wishlist removed_from_wishlist yith_wcwl_init_after_ajax yith_wcwl_reload_after_ajax', function() {
+        polarshoeRefreshWishlistCount();
+    });
+});
+
+})(jQuery);
 
