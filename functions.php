@@ -8,6 +8,7 @@ function polarshoe_enqueue_styles()
     wp_enqueue_style('polarshoe-all', get_template_directory_uri() . '/css/all.css');
     wp_enqueue_style('polarshoe-style', get_stylesheet_uri());
     wp_enqueue_style('polarshoe-responsive', get_template_directory_uri() . '/css/responsive.css');
+    wp_enqueue_style('polarshoe-custom', get_template_directory_uri() . '/css/custom.css');
 
     // Use WordPress core jQuery. Remove the duplicate custom jquery.min.js to avoid hanging JS and AJAX issues.
     wp_enqueue_script('jquery');
@@ -15,6 +16,7 @@ function polarshoe_enqueue_styles()
     wp_enqueue_script('polarshoe-splide-min', get_template_directory_uri() . '/js/splide.min.js', array('jquery'), null, true);
     wp_enqueue_script('polarshoe-wow-min', get_template_directory_uri() . '/js/wow.min.js', array('jquery'), null, true);
     wp_enqueue_script('polarshoe-jquery-fancybox-min', get_template_directory_uri() . '/js/jquery.fancybox.min.js', array('jquery'), null, true);
+    wp_enqueue_script('polarshoe-custom', get_template_directory_uri() . '/js/custom.js', array('jquery'), null, true);
     wp_enqueue_script('polarshoe-main-script', get_template_directory_uri() . '/js/script.js', array('jquery', 'polarshoe-splide-min'), '1.0', true);
 
     wp_localize_script('polarshoe-main-script', 'polarshoe_ajax', array(
@@ -29,11 +31,11 @@ add_action('wp_enqueue_scripts', 'polarshoe_enqueue_styles');
 function polarshoe_header_cart_fragment($fragments)
 {
     ob_start();
-    ?>
+?>
     <span class="cart-count" style="position: absolute; top: -8px; right: -12px; background: #E63946; color: #fff; font-size: 11px; font-weight: bold; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
         <?php echo WC()->cart ? WC()->cart->get_cart_contents_count() : 0; ?>
     </span>
-    <?php
+<?php
     $fragments['span.cart-count'] = ob_get_clean();
     return $fragments;
 }
@@ -65,13 +67,14 @@ function polarshoe_theme_setup()
 }
 add_action('after_setup_theme', 'polarshoe_theme_setup');
 
-function custom_woocommerce_product_search($query) {
+// custom product search
+function custom_woocommerce_product_search($query)
+{
     if (!is_admin() && $query->is_main_query() && $query->is_search()) {
 
         if (isset($_GET['post_type']) && $_GET['post_type'] === 'product') {
             $query->set('post_type', 'product');
         }
-
     }
 }
 add_action('pre_get_posts', 'custom_woocommerce_product_search');
@@ -83,6 +86,27 @@ function cc_mime_types($mimes)
     return $mimes;
 }
 add_filter('upload_mimes', 'cc_mime_types');
+
+// 1. Add 'Alphabetical' to the dropdown list
+add_filter('woocommerce_catalog_orderby', 'polar_shoes_add_alphabetical_sorting');
+function polar_shoes_add_alphabetical_sorting($sortby)
+{
+    $sortby['alphabetical'] = 'Alphabetical (A-Z)';
+    return $sortby;
+}
+
+// 2. Tell WooCommerce how to handle the 'alphabetical' logic in the database
+add_filter('woocommerce_get_catalog_ordering_args', 'polar_shoes_alphabetical_sorting_logic');
+function polar_shoes_alphabetical_sorting_logic($args)
+{
+    $orderby_value = isset($_GET['orderby']) ? wc_clean($_GET['orderby']) : apply_filters('woocommerce_default_catalog_orderby', get_option('woocommerce_default_catalog_orderby'));
+
+    if ('alphabetical' == $orderby_value) {
+        $args['orderby'] = 'title';
+        $args['order'] = 'ASC';
+    }
+    return $args;
+}
 
 // customizer setting for featured product display wp_customise
 function polar_shoes_featured_customizer($wp_customize)
@@ -361,7 +385,8 @@ remove_action('woocommerce_single_product_summary', 'woocommerce_template_single
 remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30);
 remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
 remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_sharing', 50);
-
+// Remove the "Sale!" badge from the product category/shop grid
+remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_show_product_loop_sale_flash', 10 );
 // 1. Stop double Images
 remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20);
 
@@ -391,7 +416,3 @@ function polarshoe_clean_loop_hook()
     // 2. Remove the default sorting dropdown
     remove_action('woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30);
 }
-
-
-
-

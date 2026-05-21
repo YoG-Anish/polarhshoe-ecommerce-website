@@ -38,12 +38,7 @@ get_header(); ?>
     <div class="container">
         <div class="d-flex justify-content-between align-items-center flex-wrap row-gap-2">
             <div class="section-head">
-                <div class="main-title">
-                    <h2 class="title">Hiking Essentialsssss</h2>
-                </div>
-                <div class="text-box">
-                    <p>Rooted in Amsterdam street culture we’ve always supported local initiatives, creatives and athletes from day one.</p>
-                </div>
+                <?php the_field('hiking_content'); ?>
             </div>
             <div class="default-btn dark-bg">
                 <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" title="">Shop Collection</a>
@@ -55,6 +50,7 @@ get_header(); ?>
                 <div class="splide__track">
                     <ul class="splide__list">
                         <?php
+                        $custom_loop1 = get_field('custom_loop1');
                         // 1. Define arguments
                         $args = array(
                             'post_type'      => 'product',
@@ -63,8 +59,8 @@ get_header(); ?>
                             'tax_query'      => array(
                                 array(
                                     'taxonomy' => 'product_cat',
-                                    'field'    => 'slug',
-                                    'terms'    => 'hiking-essentials', // CHECK THIS SLUG IN DASHBOARD!
+                                    'field'    => 'term_id',
+                                    'terms'    =>  $custom_loop1, // CHECK THIS SLUG IN DASHBOARD!
                                 ),
                             ),
                         );
@@ -115,15 +111,7 @@ get_header(); ?>
 <section class="featured-section section-gaps">
     <div class="container">
         <div class="section-head">
-            <div class="main-title">
-                <h2 class="title">
-                    Featured
-                </h2>
-            </div>
-            <div class="text-box">
-                <p>Rooted in Amsterdam street culture we’ve always supported local initiatives, creatives and athletes
-                    from day one.</p>
-            </div>
+            <?php the_field('featured_section'); ?>
         </div>
         <div class="featured-grid-box">
             <?php
@@ -336,22 +324,14 @@ get_header(); ?>
 <section class="popular-product-section section-gaps bluish-bg">
     <div class="container">
         <div class="section-head">
-            <div class="main-title">
-                <h2 class="title">
-                    Hiking Essentials
-                </h2>
-            </div>
-            <div class="text-box">
-                <p>Rooted in Amsterdam street culture we’ve always supported local initiatives, creatives and athletes
-                    from day one.</p>
-            </div>
+            <?php the_field("popular_content"); ?>
         </div>
         <div class="product-listing">
             <div class="row gy-4 gx-3">
                 <?php
                 $popular_product_array =   array(
                     'post_type' => 'product',
-                    'posts_per_page' => 4,
+                    'posts_per_page' => 6,
                     'tax_query' => array(
                         array(
                             'taxonomy' => 'product_cat',
@@ -409,7 +389,17 @@ get_header(); ?>
             </div>
         </div>
         <div class="default-btn dark-bg">
-            <a href="#" title="">View All</a>
+            <?php
+            // 1. Get the link for the 'popular' category slug
+            $popular_cat_link = get_term_link('popular', 'product_cat');
+
+            // 2. If the category exists, use it. Otherwise, use the main Shop page link.
+            $target_link = (! is_wp_error($popular_cat_link)) ? $popular_cat_link : wc_get_page_permalink('shop');
+            ?>
+
+            <a href="<?php echo esc_url($target_link); ?>" title="View all popular products">
+                View All
+            </a>
         </div>
     </div>
 </section>
@@ -417,15 +407,7 @@ get_header(); ?>
 <section class="shop-this-section section-gaps">
     <div class="container">
         <div class="section-head">
-            <div class="main-title">
-                <h2 class="title">
-                    Shop this Look
-                </h2>
-            </div>
-            <div class="text-box">
-                <p>Rooted in Amsterdam street culture we’ve always supported local initiatives, creatives and athletes
-                    from day one.</p>
-            </div>
+            <?php the_field('shop_this_look'); ?>
         </div>
         <div class="masked-bg">
             <div class="background-image-container blur-bg">
@@ -555,12 +537,7 @@ get_header(); ?>
         <div class="subscribe-box">
             <span class="bg-circle"></span>
             <div class="d-flex align-items-center justify-content-center text-center flex-column">
-                <div class="main-title">
-                    <h2 class="title">BECOME PART<br /> OF THE Polar shoes DISTRICT</h2>
-                </div>
-                <div class="text-box">
-                    <p>Promotions, new products and sales. Directly to your inbox.</p>
-                </div>
+                <?php echo get_field('contact_section'); ?>
                 <div class="subscribe-form">
                     <?php
                     $shortcode = do_shortcode('[contact-form-7 id="c62adee" title="contact form email"]');

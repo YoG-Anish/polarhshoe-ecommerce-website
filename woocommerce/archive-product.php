@@ -32,27 +32,56 @@ do_action('woocommerce_before_main_content');
 
 <section class="innerbanner-section">
     <div class="container">
-        <!-- 1. Dynamic Breadcrumbs -->
         <div class="breadcrumbs">
             <?php woocommerce_breadcrumb(); ?>
         </div>
 
+        <?php
+
+        // 1. Check if it is a Category Page
+        if ( is_product_category() ) {
+            $term = get_queried_object();
+            $term_identifier = 'product_cat_' . $term->term_id;
+            $left_image_array  = get_field('banner_left', $term_identifier);
+            $right_image_array = get_field('banner_right', $term_identifier);
+        } 
+        // 2. Check if it is the Main Shop Page
+        elseif ( is_shop() ) {
+            $shop_page_id = wc_get_page_id('shop'); // Get the ID of the page assigned as 'Shop'
+            $left_image_array  = get_field('shop_banner_left', $shop_page_id);
+            $right_image_array = get_field('shop_banner_right', $shop_page_id);
+        }
+
+        // Static fallbacks if nothing is found
+        $fallback_l = get_template_directory_uri() . '/images/banner_2.png';
+        $fallback_r = get_template_directory_uri() . '/images/banner_3.png';
+        ?>
+
         <div class="row">
+            <!-- LEFT BANNER -->
             <div class="col-md-6">
                 <div class="banner-img">
                     <div class="img-holder">
-                        <?php
-                        // Logic: If using ACF, pull category image. Fallback to static if empty.
-                        $banner_left = get_template_directory_uri() . '/images/banner_2.png';
-                        ?>
-                        <img src="<?php echo $banner_left; ?>" alt="Banner Left">
+                        <?php if ( !empty($left_image_array) ) : ?>
+                            <img src="<?php echo esc_url($left_image_array['url']); ?>" 
+                                 alt="<?php echo esc_attr($left_image_array['alt']); ?>">
+                        <?php else : ?>
+                            <img src="<?php echo esc_url($fallback_l); ?>" alt="Shop Banner Left">
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
+
+            <!-- RIGHT BANNER -->
             <div class="col-md-6 d-md-block d-none">
                 <div class="banner-img">
                     <div class="img-holder">
-                        <img src="<?php echo get_template_directory_uri(); ?>/images/banner_3.png" alt="Banner Right">
+                        <?php if ( !empty($right_image_array) ) : ?>
+                            <img src="<?php echo esc_url($right_image_array['url']); ?>" 
+                                 alt="<?php echo esc_attr($right_image_array['alt']); ?>">
+                        <?php else : ?>
+                            <img src="<?php echo esc_url($fallback_r); ?>" alt="Shop Banner Right">
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
