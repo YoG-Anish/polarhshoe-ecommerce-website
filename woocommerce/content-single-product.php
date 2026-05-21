@@ -145,17 +145,26 @@ if (post_password_required()) {
 							<div class="text-box">
 								<p><?php the_excerpt(); ?></p>
 							</div>
-							<!-- This replaces Color, Size, Quantity, and Add to Cart -->
-							<div class="product-variations-wrapper">
-								<?php
-								if ($product->is_type('variable')) {
-									// This hook triggers the Variation Swatches plugin
-									woocommerce_variable_add_to_cart();
-								} else {
-									woocommerce_simple_add_to_cart();
-								}
-								?>
+							<div class="add-to-cart">
+								<!-- This replaces Color, Size, Quantity, and Add to Cart -->
+								<div class="product-variations-wrapper">
+									<?php
+									if ($product->is_type('variable')) {
+										// This hook triggers the Variation Swatches plugin
+										woocommerce_variable_add_to_cart();
+									} else {
+										woocommerce_simple_add_to_cart();
+									}
+									?>
+
+									<div class="wishlist">
+										<div class="icon">
+											<?php echo do_shortcode('[yith_wcwl_add_to_wishlist]'); ?>
+										</div>
+									</div>
+								</div>
 							</div>
+
 							<div class="service-list">
 								<div class="d-flex justify-content-between align-items-sm-center flex-sm-row flex-column flex-wrap row-gap-3">
 									<div class="service-item">
@@ -263,4 +272,3 @@ if (post_password_required()) {
 
 <?php do_action('woocommerce_after_single_product'); ?>
 </div>
-

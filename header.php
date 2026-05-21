@@ -151,10 +151,9 @@
                                             value="<?php echo get_search_query(); ?>" />
 
                                         <!-- IMPORTANT: restrict to WooCommerce products -->
-                                        <input type="hidden" name="post_type" value="product" />
-                                        <input type="hidden" name="post_type" value="page" />
-                                        <input type="hidden" name="post_type" value="category" />
-                                        
+                                        <input type="hidden" name="post_type[]" value="product" />
+                                        <input type="hidden" name="post_type[]" value="product_category" />
+
                                         <!-- Your original Search SVG inside a submit button -->
                                         <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
                                             <div class="search">
