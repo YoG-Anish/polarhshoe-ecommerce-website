@@ -142,11 +142,19 @@
 
                                 <!-- 1. SEARCH ICON (Converted to a working search form) -->
                                 <li>
-                                    <form role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>" style="display: flex; align-items: center; margin: 0;">
-                                        <!-- The input field so users can type -->
-                                        <input type="search" name="s" placeholder="Search..." value="<?php echo get_search_query(); ?>" style="border: none; border-bottom: 1px solid #2A2A2A; background: transparent; width: 120px; padding: 2px; margin-right: 8px; outline: none; font-size: 14px;" />
-                                        <input type="hidden" name="post_type" value="product" />
+                                    <form role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>" class="woocommerce-product-search">
 
+                                        <input
+                                            type="search"
+                                            name="s"
+                                            placeholder="Search products..."
+                                            value="<?php echo get_search_query(); ?>" />
+
+                                        <!-- IMPORTANT: restrict to WooCommerce products -->
+                                        <input type="hidden" name="post_type" value="product" />
+                                        <input type="hidden" name="post_type" value="page" />
+                                        <input type="hidden" name="post_type" value="category" />
+                                        
                                         <!-- Your original Search SVG inside a submit button -->
                                         <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
                                             <div class="search">

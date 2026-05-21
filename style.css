@@ -1755,3 +1755,47 @@ form#commentform {
 .wishlist-count:contains("0") {
     display: none;
 }
+
+.polar-auth-container {
+    max-width: 450px;
+    margin: 80px auto;
+    background: #fff;
+    padding: 40px;
+    border: 1px solid #eee;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.polar-auth-container h2 {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.auth-toggle-text a {
+    color: #CB2027; /* Your Polar Red */
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.product-card {
+    border: 1px solid #eee;
+    padding: 10px;
+    text-align: center;
+}
+
+.product-card img {
+    width: 100%;
+    height: auto;
+}
+
+.price {
+    color: #000;
+    font-weight: bold;
+}

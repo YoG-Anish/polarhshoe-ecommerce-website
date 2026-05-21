@@ -13,9 +13,9 @@ function polarshoe_enqueue_styles()
     wp_enqueue_script('jquery');
     wp_enqueue_script('polarshoe-bootstrap', get_template_directory_uri() . '/js/bootstrap.js', array('jquery'), null, true);
     wp_enqueue_script('polarshoe-splide-min', get_template_directory_uri() . '/js/splide.min.js', array('jquery'), null, true);
-    wp_enqueue_script('polarshoe-main-script', get_template_directory_uri() . '/js/script.js', array('jquery', 'polarshoe-splide-min'), '1.0', true);
     wp_enqueue_script('polarshoe-wow-min', get_template_directory_uri() . '/js/wow.min.js', array('jquery'), null, true);
     wp_enqueue_script('polarshoe-jquery-fancybox-min', get_template_directory_uri() . '/js/jquery.fancybox.min.js', array('jquery'), null, true);
+    wp_enqueue_script('polarshoe-main-script', get_template_directory_uri() . '/js/script.js', array('jquery', 'polarshoe-splide-min'), '1.0', true);
 
     wp_localize_script('polarshoe-main-script', 'polarshoe_ajax', array(
         'ajax_url' => admin_url('admin-ajax.php'),
@@ -65,7 +65,16 @@ function polarshoe_theme_setup()
 }
 add_action('after_setup_theme', 'polarshoe_theme_setup');
 
+function custom_woocommerce_product_search($query) {
+    if (!is_admin() && $query->is_main_query() && $query->is_search()) {
 
+        if (isset($_GET['post_type']) && $_GET['post_type'] === 'product') {
+            $query->set('post_type', 'product');
+        }
+
+    }
+}
+add_action('pre_get_posts', 'custom_woocommerce_product_search');
 
 //support svg file
 function cc_mime_types($mimes)

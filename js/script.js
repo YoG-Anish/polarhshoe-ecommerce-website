@@ -349,5 +349,20 @@ jQuery(function($) {
     });
 });
 
+// Toggle between Login and Register forms
+$('#show-register-btn').on('click', function(e) {
+    e.preventDefault();
+    $('#auth-login-section').fadeOut(200, function() {
+        $('#auth-register-section').fadeIn(200);
+    });
+});
+
+$('#show-login-btn').on('click', function(e) {
+    e.preventDefault();
+    $('#auth-register-section').fadeOut(200, function() {
+        $('#auth-login-section').fadeIn(200);
+    });
+});
+
 })(jQuery);
 
