@@ -21,7 +21,7 @@
                                 <a href="#"><?php echo get_theme_mod('footer_phone_number'); ?></a>
                             </div>
                             <div class="default-btn_v2">
-                                <a href="#" title="">
+                                <a href="<?php echo esc_url(get_permalink(get_page_by_path('contact-us'))); ?> " title="">
                                     <?php echo get_theme_mod('footer_get_direction_text'); ?>
                                     <span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"
@@ -107,15 +107,15 @@
                 </div>
                 <div class="partner">
                     <div class="d-flex gap-3">
-                        <a href="#"><img src="images/visa.png" alt=""></a>
-                        <a href="#"><img src="images/paypal.png" alt=""></a>
-                        <a href="#"><img src="images/mastercard.png" alt=""></a>
+                        <a href="<?php echo esc_url(wc_get_checkout_url()) ?>"><img src="<?php echo get_template_directory_uri(); ?>/images/visa.png" alt=""></a>
+                        <a href="<?php echo esc_url(wc_get_checkout_url()) ?>"><img src="<?php echo get_template_directory_uri(); ?>/images/paypal.png" alt=""></a>
+                        <a href="<?php echo esc_url(wc_get_checkout_url()) ?>"><img src="<?php echo get_template_directory_uri(); ?>/images/mastercard.png" alt=""></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-   
+
 </footer>
 
 

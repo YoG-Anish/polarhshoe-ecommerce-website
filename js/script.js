@@ -329,25 +329,34 @@ $(document).ready(function(){
 
 })();
 
-function polarshoeRefreshWishlistCount() {
-    if (typeof polarshoe_ajax === 'undefined' || !polarshoe_ajax.ajax_url) {
-        return;
-    }
+'use strict';
 
-    jQuery.post(polarshoe_ajax.ajax_url, { action: 'polarshoe_wishlist_count' }, function(response) {
-        if (response && response.success && typeof response.data.count !== 'undefined') {
-            jQuery('.wishlist-count').text(response.data.count);
+$(document).ready(function() {
+        
+        // This function calls your PHP code to get the new count
+        function update_header_wishlist_count() {
+            $.ajax({
+                url: polarshoe_ajax_obj.ajax_url, // We will define this in Step 2
+                type: 'POST',
+                data: {
+                    action: 'polarshoe_wishlist_count'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Update the number in your header
+                        $('.wishlist-count').html(response.data.count);
+                        console.log('Wishlist updated to: ' + response.data.count);
+                    }
+                }
+            });
         }
-    }, 'json');
-}
 
-jQuery(function($) {
-    polarshoeRefreshWishlistCount();
-
-    $(document.body).on('added_to_wishlist removed_from_wishlist yith_wcwl_init_after_ajax yith_wcwl_reload_after_ajax', function() {
-        polarshoeRefreshWishlistCount();
+        // Listen for YITH "Add" and "Remove" events
+        $(document.body).on('added_to_wishlist removed_from_wishlist', function() {
+            // We wait 500ms to make sure the database is updated before we ask for the count
+            setTimeout(update_header_wishlist_count, 500);
+        });
     });
-});
 
 // Toggle between Login and Register forms
 $('#show-register-btn').on('click', function(e) {

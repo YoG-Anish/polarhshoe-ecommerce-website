@@ -41,17 +41,15 @@ function polarshoe_header_cart_fragment($fragments)
 }
 add_filter('woocommerce_add_to_cart_fragments', 'polarshoe_header_cart_fragment');
 
-/**
- * 5. Return wishlist count for AJAX refresh after YITH add/remove.
- */
-function polarshoe_wishlist_count()
-{
-    $count = function_exists('yith_wcwl_count_products') ? yith_wcwl_count_products() : 0;
-    wp_send_json_success(array('count' => intval($count)));
-}
-add_action('wp_ajax_polarshoe_wishlist_count', 'polarshoe_wishlist_count');
-add_action('wp_ajax_nopriv_polarshoe_wishlist_count', 'polarshoe_wishlist_count');
+function polarshoe_enqueue_scripts() {
+    wp_enqueue_script( 'polarshoe-script', get_template_directory_uri() . '/js/script.js', array('jquery'), '1.0', true );
 
+    // This makes 'polarshoe_ajax_obj.ajax_url' available in your JS file
+    wp_localize_script( 'polarshoe-script', 'polarshoe_ajax_obj', array(
+        'ajax_url' => admin_url( 'admin-ajax.php' )
+    ));
+}
+add_action( 'wp_enqueue_scripts', 'polarshoe_enqueue_scripts' );
 // theme support
 function polarshoe_theme_setup()
 {
@@ -111,6 +109,32 @@ function polar_shoes_alphabetical_sorting_logic($args)
 // customizer setting for featured product display wp_customise
 function polar_shoes_featured_customizer($wp_customize)
 {
+    //add header section
+    $wp_customize->add_section('header_section_settings', array(
+        'title'      => __('Header Section (Home)', 'polar-shoes'),
+        'priority'   => 30,
+    ));
+
+    //top sale text
+    $wp_customize->add_setting('top_sale_text', array(
+        'default' => ''
+    ));
+    $wp_customize->add_control('top_sale_text', array(
+        'label' => 'Top Sale Text',
+        'section' => 'header_section_settings',
+        'type' => 'text'
+    ));
+
+    //top shop now text
+    $wp_customize->add_setting('top_shop_now_text', array(
+        'default' => ''
+    ));
+    $wp_customize->add_control('top_shop_now_text', array(
+        'label' => 'Shop Now Text',
+        'section' => 'header_section_settings',
+        'type' => 'text'
+    ));
+
     // 1. Add Section
     $wp_customize->add_section('featured_section_settings', array(
         'title'      => __('Featured Section (Home)', 'polar-shoes'),
