@@ -8,6 +8,9 @@ get_header();
 <section class="product-listing-section section-gaps pt-0">
     <div class="container">
         <div class="main-title">
+            <div class="breadcrumbs">
+                <?php woocommerce_breadcrumb(); ?>
+            </div>
             <h2 class="title">FLASH SALE</h2>
         </div>
 

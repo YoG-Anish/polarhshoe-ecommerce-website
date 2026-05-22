@@ -9,17 +9,17 @@
 
 </head>
 
-<body>
+<body <?php body_class(); ?>>
     <header class="site-header">
         <div class="top-header">
             <div class="container">
                 <div class="d-flex justify-content-center align-items-center gap-2">
                     <div class="text-box">
-                        <p>Spring Fashion Sale: Time to refresh your wardrobe.</p>
+                        <p><?php echo get_theme_mod('top_sale_text'); ?></p>
                     </div>
                     <div class="shop-now">
                         <a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" title="">
-                            Shop now
+                            <?php echo get_theme_mod('top_shop_now_text'); ?>
                             <span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"
                                     fill="none">
@@ -181,7 +181,7 @@
 
                                                 <!-- Dynamic Count Badge -->
                                                 <span class="wishlist-count">
-                                                    <?php echo yith_wcwl_count_products(); ?>
+                                                    <?php echo function_exists('yith_wcwl_count_products') ? yith_wcwl_count_products() : 0; ?>
                                                 </span>
                                             </div>
                                         </a>
